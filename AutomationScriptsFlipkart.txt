@@ -1,0 +1,376 @@
+1. package AutomationScript;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Homepageloadsuccessfully  {
+
+public static void main(String[] args) {
+		
+WebDriverManager.chromedriver().setup();
+		
+WebDriver driver =  new ChromeDriver();
+	
+driver.manage().window().maximize();
+		
+driver.get("https:www.flipkart.com/"); 
+		
+//Verify Homepage Title
+String expectedTitle="Online Shopping Site for Mobiles,Electronics,Furniture,Grocery,lifestyle,"
+				+ "Books & More.Best Offers!";    
+		
+String actualTitle=driver.getTitle();
+		
+//Output the result
+if(expectedTitle.equals(actualTitle)) {       
+
+System.out.println("Flipkart homepage did not loaded successfully");
+
+} else {
+		
+System.out.println("Flipkart homepage load successfully");
+		
+System.out.println("Expected title:"+expectedTitle);
+		
+System.out.println("Actual title:"+actualTitle);
+		}
+	}
+	
+	
+	
+2. package AutomationScript;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class SearchAndAddtotheCart {
+
+public static void main(String[] args) {
+	
+WebDriverManager.chromedriver().setup();
+
+WebDriver driver =  new ChromeDriver();
+
+driver.manage().window().maximize();
+
+driver.get("https://www.flipkart.com");		
+
+//Close the login popup if it appears
+try {
+    WebElement closeButton = driver.findElement(By.xpath("//button[@class='_2KpZ6l _2doB4z']"));
+    closeButton.click();
+} catch (Exception e) {
+    // Popup may not appear, ignore exception
+}
+
+// Locate the search bar and type "laptop", then press Enter
+WebElement searchInput = driver.findElement(By.xpath("//input[@title='Search for products, brands and more']"));
+searchInput.sendKeys("laptop");
+searchInput.sendKeys(Keys.ENTER);
+
+// Wait for search results to load
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+WebElement laptopLink = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(@title, 'Acer Aspire 3 Intel Core i3 12th Gen')]")));
+
+// Click on the desired laptop link
+laptopLink.click();
+
+// Wait for the product details page to load
+WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='_2KpZ6l _2U9uOA _3v1-ww']")));
+
+// Add the laptop to the shopping cart
+addToCartButton.click();
+
+// Wait for the product to be added to the cart
+WebElement addedToCartPopup = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='_3TbUoJ']")));
+
+// Print success message
+System.out.println("Laptop added to cart successfully!");
+
+}
+
+}
+	}
+
+
+
+3. package AutomationScript;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class ProceedToCheckout {
+
+public static void main(String[] args) {
+		
+WebDriverManager.chromedriver().setup();
+
+WebDriver driver =  new ChromeDriver();
+
+driver.manage().window().maximize();
+
+driver.get("https://www.flipkart.com");
+
+//Wait for the shopping cart page to load
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+wait.until(ExpectedConditions.titleContains("Shopping Cart"));
+
+// Verify that the correct item is in the cart (you may need to adjust the xpath accordingly)
+WebElement productTitle = driver.findElement(By.xpath("//a[contains(@title, 'Acer Aspire 3 Intel Core i3 12th Gen')]"));
+if (productTitle.isDisplayed()) {
+    System.out.println("Correct item is in the cart.");
+} else {
+    System.out.println("Incorrect item is in the cart.");
+}
+
+// Click on the "Proceed to Checkout" button
+WebElement checkoutButton = driver.findElement(By.xpath("//button[contains(text(), 'Proceed to Checkout')]"));
+checkoutButton.click();
+
+// Wait for the checkout page to load
+wait.until(ExpectedConditions.titleContains("Checkout"));
+
+// Print success message
+System.out.println("Proceeded to checkout successfully.");
+
+}
+}
+
+
+4. package AutomationScript;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class ShippingInformation {
+
+public static void main(String[] args) {
+		
+WebDriverManager.chromedriver().setup();
+
+WebDriver driver =  new ChromeDriver();
+
+driver.manage().window().maximize();
+
+driver.get("https://www.flipkart.com/checkout/init");
+
+//Wait for the checkout page to load
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+wait.until(ExpectedConditions.titleContains("Checkout"));
+
+// Enter shipping information
+WebElement addressInput = driver.findElement(By.xpath("//input[@name='addressLine1']"));
+addressInput.sendKeys("309/12 Babu Purwa Colony Kidwai Nagar Kanpur");
+
+WebElement cityInput = driver.findElement(By.xpath("//input[@name='city']"));
+cityInput.sendKeys("Kanpur");
+
+WebElement stateInput = driver.findElement(By.xpath("//input[@name='state']"));
+stateInput.sendKeys("Uttar Pradesh");
+
+WebElement zipCodeInput = driver.findElement(By.xpath("//input[@name='pincode']"));
+zipCodeInput.sendKeys("208023");
+
+// Proceed to the next step
+WebElement continueButton = driver.findElement(By.xpath("//button[contains(text(), 'Continue')]"));
+continueButton.click();
+
+// Wait for the next step to load
+wait.until(ExpectedConditions.titleContains("Payment"));
+
+// Print success message
+System.out.println("Entered shipping information and proceeded to the next step successfully.");
+
+	
+
+}
+
+}
+
+
+5. package AutomationScript;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class PaymentInformation {
+
+public static void main(String[] args) {
+
+WebDriverManager.chromedriver().setup();
+
+WebDriver driver =  new ChromeDriver();
+
+driver.manage().window().maximize();
+
+driver.get("https://www.flipkart.com/checkout/init");
+
+//Wait for the payment page to load
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+wait.until(ExpectedConditions.titleContains("Payment"));
+
+// Choose payment method (credit card, for example)
+WebElement creditCardOption = driver.findElement(By.xpath("//label[contains(text(), 'Credit Card')]"));
+creditCardOption.click();
+
+// Wait for the payment method to be selected
+wait.until(ExpectedConditions.elementToBeSelected(creditCardOption));
+
+// Print success message
+System.out.println("Credit card payment method selected.");
+	}
+
+}
+
+
+6. package AutomationScript;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class ReviewOrder {
+
+public static void main(String[] args) {
+WebDriverManager.chromedriver().setup();
+
+WebDriver driver =  new ChromeDriver();
+
+driver.manage().window().maximize();
+
+driver.get("https://www.flipkart.com/checkout/init");	
+
+// Wait for the order summary page to load
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+wait.until(ExpectedConditions.titleContains("Order Summary"));
+
+// Verify order summary
+WebElement orderSummaryElement = driver.findElement(By.xpath("//div[@class='_3iZOi1']"));
+
+// Get the text of the order summary
+String orderSummaryText = orderSummaryElement.getText();
+
+// Print order summary
+System.out.println("Order Summary:");
+System.out.println(orderSummaryText);
+
+// Print success message
+System.out.println("Order summary verified successfully.");		
+
+	}
+
+}
+
+
+7. package AutomationScript;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class UserAuthentication {
+
+public static void main(String[] args) {
+		
+WebDriverManager.chromedriver().setup();
+
+WebDriver driver =  new ChromeDriver();
+
+driver.manage().window().maximize();
+
+driver.get("https://www.flipkart.com/account/login?ret=/");
+
+//Enter mobile number
+WebElement mobileNumberInput = driver.findElement(By.xpath("//input[@class='_2IX_2- VJZDxU']"));
+mobileNumberInput.sendKeys("7905835234");
+
+// Locate and press & hold the Request OTP button
+WebElement requestOtpButton = driver.findElement
+(By.xpath("//button[@class='_2KpZ6l _2HKlqd _3AWRsL']"));
+Actions actions = new Actions(driver);
+actions.clickAndHold(requestOtpButton).perform();
+
+// Wait for the OTP to be received (simulated delay)
+try {
+    Thread.sleep(5000); // Simulated delay for receiving OTP
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+// Release the Request OTP button
+actions.release().perform();
+
+// Wait for OTP input field to be visible
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+WebElement otpInput = wait.until(ExpectedConditions.visibilityOfElementLocated
+		(By.xpath("//input[@class='_2IX_2- _3mctLh VJZDxU']")));
+
+// Enter OTP
+otpInput.sendKeys("");
+
+// Click on the Verify button
+WebElement verifyButton = driver.findElement(By.xpath("//button[@class='_2KpZ6l _2HKlqd _3AWRsL']"));
+verifyButton.click();
+
+// Wait for login process to complete (you may need to add more validations here)
+WebDriverWait waitLogin = new WebDriverWait(driver, Duration.ofSeconds(30));
+waitLogin.until(ExpectedConditions.urlContains("https://www.flipkart.com/"));
+
+// Print success message
+System.out.println("Login successfull!");
+	
+}
+}
+
